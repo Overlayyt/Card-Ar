@@ -31,7 +31,7 @@
     .jewelry-row {
       display: flex;
       gap: 12px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
     }
 
@@ -96,8 +96,10 @@
       </select>
     </div>
 
-    <button id="buyNowButton" style="display: none;">Explore</button>
-    <button id="playPauseButton" style="display: none;">Play with Audio</button>
+    <div style="display: flex; gap: 12px; margin-top: 10px;">
+      <button id="buyNowButton" style="display: none;">Explore</button>
+      <button id="playPauseButton" style="display: none;">Play with Audio</button>
+    </div>
   </div>
 
   <div id="aboutUsContainer">
