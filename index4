@@ -64,23 +64,11 @@
       position: absolute;
       top: 20px;
       left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 10px;
       backdrop-filter: blur(6px);
       display: none;
-    }
-
-    #aboutUsSelect {
-      padding: 10px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      background-color: #e91e63;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    #aboutUsSelect:hover {
-      background-color: #c2185b;
     }
 
     .a-enter-vr-button {
@@ -125,8 +113,6 @@
 
   <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
     <a-assets>
-      <video id="introVideo" src="intro.mp4" playsinline loop></video>
-
       <video id="goldRingVideo" src="gold rings.mp4" playsinline loop></video>
       <video id="goldNecklaceVideo" src="gold chain.mp4" playsinline loop></video>
       <video id="goldEarringsVideo" src="gold earring.mp4" playsinline loop></video>
@@ -148,7 +134,7 @@
 
     <a-entity id="target1" mindar-image-target="targetIndex: 0">
       <a-image src="#logoImage" position="0 .45 0" width=".9" height=".35"></a-image>
-      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1" material="src: #introVideo"></a-plane>
+      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1"></a-plane>
     </a-entity>
   </a-scene>
 
@@ -158,7 +144,7 @@
     const playPauseButton = document.querySelector('#playPauseButton');
     const aboutUsContainer = document.querySelector('#aboutUsContainer');
 
-    let currentVideo = document.querySelector('#introVideo');
+    let currentVideo = null;
     let isPlaying = false;
     let targetVisible = false;
 
