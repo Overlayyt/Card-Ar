@@ -151,9 +151,8 @@
       if (currentVideo) currentVideo.pause();
       currentVideo = videoElement;
       videoDisplay.setAttribute('material', 'src', `#${videoElement.id}`);
-      currentVideo.play();
-      isPlaying = true;
-      playPauseButton.textContent = 'Pause';
+      isPlaying = false;
+      playPauseButton.textContent = 'Play with Audio';
 
       buyNowButton.style.display = link ? 'inline-block' : 'none';
       playPauseButton.style.display = 'inline-block';
