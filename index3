@@ -28,13 +28,6 @@
       align-items: center;
     }
 
-    .jewelry-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
     .floating-panel select,
     .floating-panel button {
       padding: 10px;
@@ -78,23 +71,21 @@
 </head>
 <body>
   <div class="floating-panel" id="catalogueContainer" style="display: none;">
-    <div class="jewelry-row">
-      <select id="goldJewelrySelect">
-        <option value="">Gold Jewellery</option>
-        <option value="ring">Ring</option>
-        <option value="necklace">Necklace</option>
-        <option value="earrings">Earrings</option>
-        <option value="bracelet">Bracelet</option>
-      </select>
+    <select id="goldJewelrySelect">
+      <option value="">Gold Jewellery</option>
+      <option value="ring">Ring</option>
+      <option value="necklace">Necklace</option>
+      <option value="earrings">Earrings</option>
+      <option value="bracelet">Bracelet</option>
+    </select>
 
-      <select id="diamondJewelrySelect">
-        <option value="">Diamond Jewellery</option>
-        <option value="ring">Ring</option>
-        <option value="necklace">Necklace</option>
-        <option value="earrings">Earrings</option>
-        <option value="bracelet">Bracelet</option>
-      </select>
-    </div>
+    <select id="diamondJewelrySelect">
+      <option value="">Diamond Jewellery</option>
+      <option value="ring">Ring</option>
+      <option value="necklace">Necklace</option>
+      <option value="earrings">Earrings</option>
+      <option value="bracelet">Bracelet</option>
+    </select>
 
     <button id="buyNowButton" style="display: none;">Explore</button>
     <button id="playPauseButton" style="display: none;">Play with Audio</button>
