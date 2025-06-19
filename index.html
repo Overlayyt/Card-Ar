@@ -1,32 +1,250 @@
-<!-- Controls Panel -->
-<div id="controlsPanel" class="floating-ui hidden">
-    <div id="dropdownWrapper">
-        <!-- Gold Dropdown -->
-        <select id="goldSelect">
-            <option value="">Gold Jewellery</option>
-            <option value="ring">Ring</option>
-            <option value="necklace">Necklace</option>
-        </select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+    }
 
-        <!-- Diamond Dropdown -->
-        <select id="diamondSelect">
-            <option value="">Diamond Jewellery</option>
-            <option value="earrings">Earrings</option>
-            <option value="bracelet">Bracelet</option>
-        </select>
+    .ui-panel {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
 
-        <!-- About Us Dropdown -->
-        <select id="aboutSelect">
-            <option value="">About Us</option>
-            <option value="intro">Intro</option>
-            <option value="history">History</option>
-        </select>
+    .dropdown-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dropdown {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .dropdown.selected {
+      border: 2px solid #4CAF50;
+    }
+
+    .button-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      background-color: #FFD700;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #aboutUsContainer {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      z-index: 10;
+      display: none;
+    }
+
+    .a-enter-vr-button {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="aboutUsContainer">
+    <select id="aboutUsSelect" class="dropdown">
+      <option value="">-- About Us --</option>
+      <option value="intro">Introduction</option>
+      <option value="history">Our History</option>
+      <option value="mission">Our Mission</option>
+    </select>
+  </div>
+
+  <div class="ui-panel" id="catalogueContainer" style="display: none;">
+    <div class="dropdown-group">
+      <select id="goldJewelrySelect" class="dropdown">
+        <option value="">Gold Jewellery</option>
+        <option value="ring">Gold Ring</option>
+        <option value="necklace">Gold Necklace</option>
+        <option value="earrings">Gold Earrings</option>
+        <option value="bracelet">Gold Bracelet</option>
+      </select>
+
+      <select id="diamondJewelrySelect" class="dropdown">
+        <option value="">Diamond Jewellery</option>
+        <option value="ring">Diamond Ring</option>
+        <option value="necklace">Diamond Necklace</option>
+        <option value="earrings">Diamond Earrings</option>
+        <option value="bracelet">Diamond Bracelet</option>
+      </select>
     </div>
 
-    <!-- Video Controls -->
-    <div id="videoControls">
-        <button id="playPauseBtn">▶️</button>
-        <button id="muteBtn">🔇</button>
-        <button id="fullscreenBtn">⛶</button>
+    <div class="button-bar">
+      <button id="buyNowButton" class="btn" style="display: none;">Explore</button>
+      <button id="playPauseButton" class="btn" style="display: none;">Play with Audio</button>
     </div>
-</div>
+  </div>
+
+  <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-assets>
+      <video id="goldRingVideo" src="gold rings.mp4" playsinline loop></video>
+      <video id="goldNecklaceVideo" src="gold chain.mp4" playsinline loop></video>
+      <video id="goldEarringsVideo" src="gold earring.mp4" playsinline loop></video>
+      <video id="goldBraceletVideo" src="gold bracelet.mp4" playsinline loop></video>
+
+      <video id="diamondRingVideo" src="DIAMOND ring.mp4" playsinline loop></video>
+      <video id="diamondNecklaceVideo" src="DIAMOND chain.mp4" playsinline loop></video>
+      <video id="diamondEarringsVideo" src="DIAMOND earing.mp4" playsinline loop></video>
+      <video id="diamondBraceletVideo" src="DIAMOND bracelet.mp4" playsinline loop></video>
+
+      <video id="aboutUsIntroVideo" src="intro.mp4" playsinline loop></video>
+      <video id="aboutUsHistoryVideo" src="about_us_history.mp4" playsinline loop></video>
+      <video id="aboutUsMissionVideo" src="about_us_mission.mp4" playsinline loop></video>
+
+      <img id="logoImage" src="4k.png" />
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="target1" mindar-image-target="targetIndex: 0">
+      <a-image src="#logoImage" position="0 .45 0" width=".9" height=".35"></a-image>
+      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1"></a-plane>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    const videoDisplay = document.querySelector('#videoDisplay');
+    const buyNowButton = document.querySelector('#buyNowButton');
+    const playPauseButton = document.querySelector('#playPauseButton');
+    const aboutUsContainer = document.querySelector('#aboutUsContainer');
+
+    let currentVideo = null;
+    let isPlaying = false;
+    let targetVisible = false;
+
+    const selects = {
+      gold: document.querySelector('#goldJewelrySelect'),
+      diamond: document.querySelector('#diamondJewelrySelect'),
+      about: document.querySelector('#aboutUsSelect')
+    };
+
+    const resetDropdowns = (except) => {
+      Object.values(selects).forEach(select => {
+        if (select !== except) {
+          select.value = "";
+          select.classList.remove('selected');
+        }
+      });
+    };
+
+    const updateVideo = (videoElement, link = "") => {
+      if (currentVideo) currentVideo.pause();
+      currentVideo = videoElement;
+      videoDisplay.setAttribute('material', 'src', `#${videoElement.id}`);
+      currentVideo.play();
+      isPlaying = true;
+      playPauseButton.textContent = 'Pause';
+
+      buyNowButton.style.display = link ? 'inline-block' : 'none';
+      playPauseButton.style.display = 'inline-block';
+
+      if (link) buyNowButton.onclick = () => window.open(link, '_blank');
+    };
+
+    selects.gold.onchange = e => {
+      resetDropdowns(selects.gold);
+      selects.gold.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
+        ring: ['goldRingVideo', 'https://www.bluestone.com/jewellery/rings.html'],
+        necklace: ['goldNecklaceVideo', 'https://www.bluestone.com/jewellery/necklaces.html'],
+        earrings: ['goldEarringsVideo', 'https://www.bluestone.com/jewellery/earrings.html'],
+        bracelet: ['goldBraceletVideo', 'https://www.bluestone.com/jewellery/bangles.html']
+      };
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val][0]}`), videos[val][1]);
+    };
+
+    selects.diamond.onchange = e => {
+      resetDropdowns(selects.diamond);
+      selects.diamond.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
+        ring: ['diamondRingVideo', 'https://example.com/diamond-rings'],
+        necklace: ['diamondNecklaceVideo', 'https://example.com/diamond-necklaces'],
+        earrings: ['diamondEarringsVideo', 'https://example.com/diamond-earrings'],
+        bracelet: ['diamondBraceletVideo', 'https://example.com/diamond-bracelets']
+      };
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val][0]}`), videos[val][1]);
+    };
+
+    selects.about.onchange = e => {
+      resetDropdowns(selects.about);
+      selects.about.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
+        intro: 'aboutUsIntroVideo',
+        history: 'aboutUsHistoryVideo',
+        mission: 'aboutUsMissionVideo'
+      };
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val]}`));
+    };
+
+    playPauseButton.onclick = () => {
+      if (currentVideo && targetVisible) {
+        if (isPlaying) {
+          currentVideo.pause();
+          playPauseButton.textContent = 'Play with Audio';
+        } else {
+          currentVideo.play();
+          playPauseButton.textContent = 'Pause';
+        }
+        isPlaying = !isPlaying;
+      }
+    };
+
+    const target = document.querySelector('#target1');
+    target.addEventListener('targetFound', () => {
+      targetVisible = true;
+      document.querySelector('#catalogueContainer').style.display = 'flex';
+      aboutUsContainer.style.display = 'block';
+    });
+    target.addEventListener('targetLost', () => {
+      targetVisible = false;
+      document.querySelector('#catalogueContainer').style.display = 'none';
+      aboutUsContainer.style.display = 'none';
+      if (currentVideo) currentVideo.pause();
+      isPlaying = false;
+      playPauseButton.textContent = 'Play with Audio';
+    });
+  </script>
+</body>
+</html>
