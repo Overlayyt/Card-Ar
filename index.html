@@ -60,29 +60,6 @@
       background-color: #c2185b;
     }
 
-    #aboutUsContainer {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      backdrop-filter: blur(6px);
-      display: none;
-    }
-
-    #aboutUsButton {
-      padding: 10px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      background-color: #e91e63;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    #aboutUsButton:hover {
-      background-color: #c2185b;
-    }
-
     .a-enter-vr-button {
       display: none !important;
     }
@@ -117,8 +94,6 @@
 
   <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
     <a-assets>
-      <video id="introVideo" src="intro.mp4" playsinline loop></video>
-
       <video id="goldRingVideo" src="gold rings.mp4" playsinline loop></video>
       <video id="goldNecklaceVideo" src="gold chain.mp4" playsinline loop></video>
       <video id="goldEarringsVideo" src="gold earring.mp4" playsinline loop></video>
@@ -130,17 +105,15 @@
       <video id="diamondBraceletVideo" src="DIAMOND bracelet.mp4" playsinline loop></video>
 
       <video id="aboutUsIntroVideo" src="intro.mp4" playsinline loop></video>
-      <video id="aboutUsHistoryVideo" src="about_us_history.mp4" playsinline loop></video>
-      <video id="aboutUsMissionVideo" src="about_us_mission.mp4" playsinline loop></video>
 
-      <img id="logoImage" src="4k.png" />
+      
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="target1" mindar-image-target="targetIndex: 0">
-      <a-image src="#logoImage" position="0 .45 0" width=".9" height=".35"></a-image>
-      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1" material="src: #introVideo"></a-plane>
+      
+      <a-plane id="videoDisplay" position="0 0 0" height="0.59" width="1"></a-plane>
     </a-entity>
   </a-scene>
 
@@ -150,7 +123,7 @@
     const playPauseButton = document.querySelector('#playPauseButton');
     const aboutUsButton = document.querySelector('#aboutUsButton');
 
-    let currentVideo = document.querySelector('#introVideo');
+    let currentVideo = null;
     let isPlaying = false;
     let targetVisible = false;
 
@@ -159,14 +132,16 @@
       diamond: document.querySelector('#diamondJewelrySelect')
     };
 
-    const resetDropdowns = () => {
+    const resetDropdowns = (exceptSelect = null) => {
       Object.values(selects).forEach(select => {
-        select.value = "";
+        if (select !== exceptSelect) select.value = "";
       });
     };
 
     const updateVideo = (videoElement, link = "") => {
-      if (currentVideo) currentVideo.pause();
+      if (currentVideo && currentVideo !== videoElement) {
+        currentVideo.pause();
+      }
       currentVideo = videoElement;
       videoDisplay.setAttribute('material', 'src', `#${videoElement.id}`);
       isPlaying = false;
@@ -179,7 +154,7 @@
     };
 
     selects.gold.onchange = e => {
-      resetDropdowns();
+      resetDropdowns(selects.gold);
       const map = {
         ring: ['goldRingVideo', 'https://www.bluestone.com/jewellery/rings.html'],
         necklace: ['goldNecklaceVideo', 'https://www.bluestone.com/jewellery/necklaces.html'],
@@ -191,7 +166,7 @@
     };
 
     selects.diamond.onchange = e => {
-      resetDropdowns();
+      resetDropdowns(selects.diamond);
       const map = {
         ring: ['diamondRingVideo', 'https://example.com/diamond-rings'],
         necklace: ['diamondNecklaceVideo', 'https://example.com/diamond-necklaces'],
