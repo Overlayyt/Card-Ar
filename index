@@ -1,64 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #000;
     }
 
-    .floating-panel {
+    .ui-panel {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 16px;
-      backdrop-filter: blur(8px);
-      padding: 16px;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 12px;
-      z-index: 100;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      z-index: 10;
     }
 
-    .floating-panel select,
-    .floating-panel button {
+    .dropdown-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dropdown {
       padding: 10px;
-      font-size: 14px;
+      border-radius: 10px;
       border: none;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    .floating-panel select {
-      background: #fff;
-      color: #000;
-    }
-
-    .floating-panel button {
-      background-color: #e91e63;
-      color: white;
-      font-weight: 600;
+      background: white;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    .floating-panel button:hover {
-      background-color: #c2185b;
+    .dropdown.selected {
+      border: 2px solid #4CAF50;
+    }
+
+    .button-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      background-color: #FFD700;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
 
     #aboutUsContainer {
       position: absolute;
-      bottom: 20px;
-      left: 20px;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       background: rgba(255, 255, 255, 0.1);
       padding: 12px;
       border-radius: 10px;
       backdrop-filter: blur(6px);
+      z-index: 10;
       display: none;
     }
 
@@ -68,34 +80,38 @@
   </style>
 </head>
 <body>
-  <div class="floating-panel" id="catalogueContainer" style="display: none;">
-    <select id="goldJewelrySelect">
-      <option value="">Gold Jewellery</option>
-      <option value="ring">Ring</option>
-      <option value="necklace">Necklace</option>
-      <option value="earrings">Earrings</option>
-      <option value="bracelet">Bracelet</option>
+  <div id="aboutUsContainer">
+    <select id="aboutUsSelect" class="dropdown">
+      <option value="">-- About Us --</option>
+      <option value="intro">Introduction</option>
+      <option value="history">Our History</option>
+      <option value="mission">Our Mission</option>
     </select>
-
-    <select id="diamondJewelrySelect">
-      <option value="">Diamond Jewellery</option>
-      <option value="ring">Ring</option>
-      <option value="necklace">Necklace</option>
-      <option value="earrings">Earrings</option>
-      <option value="bracelet">Bracelet</option>
-    </select>
-
-    <button id="buyNowButton" style="display: none;">Explore</button>
-    <button id="playPauseButton" style="display: none;">Play with Audio</button>
   </div>
 
-  <div id="aboutUsContainer">
-    <select id="aboutUsSelect">
-      <option value="">About Us</option>
-      <option value="intro">Intro</option>
-      <option value="history">History</option>
-      <option value="mission">Mission</option>
-    </select>
+  <div class="ui-panel" id="catalogueContainer" style="display: none;">
+    <div class="dropdown-group">
+      <select id="goldJewelrySelect" class="dropdown">
+        <option value="">Gold Jewellery</option>
+        <option value="ring">Gold Ring</option>
+        <option value="necklace">Gold Necklace</option>
+        <option value="earrings">Gold Earrings</option>
+        <option value="bracelet">Gold Bracelet</option>
+      </select>
+
+      <select id="diamondJewelrySelect" class="dropdown">
+        <option value="">Diamond Jewellery</option>
+        <option value="ring">Diamond Ring</option>
+        <option value="necklace">Diamond Necklace</option>
+        <option value="earrings">Diamond Earrings</option>
+        <option value="bracelet">Diamond Bracelet</option>
+      </select>
+    </div>
+
+    <div class="button-bar">
+      <button id="buyNowButton" class="btn" style="display: none;">Explore</button>
+      <button id="playPauseButton" class="btn" style="display: none;">Play with Audio</button>
+    </div>
   </div>
 
   <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
@@ -143,7 +159,10 @@
 
     const resetDropdowns = (except) => {
       Object.values(selects).forEach(select => {
-        if (select !== except) select.value = "";
+        if (select !== except) {
+          select.value = "";
+          select.classList.remove('selected');
+        }
       });
     };
 
@@ -163,37 +182,40 @@
 
     selects.gold.onchange = e => {
       resetDropdowns(selects.gold);
-      const map = {
+      selects.gold.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
         ring: ['goldRingVideo', 'https://www.bluestone.com/jewellery/rings.html'],
         necklace: ['goldNecklaceVideo', 'https://www.bluestone.com/jewellery/necklaces.html'],
         earrings: ['goldEarringsVideo', 'https://www.bluestone.com/jewellery/earrings.html'],
         bracelet: ['goldBraceletVideo', 'https://www.bluestone.com/jewellery/bangles.html']
       };
-      const val = e.target.value;
-      if (map[val]) updateVideo(document.querySelector(`#${map[val][0]}`), map[val][1]);
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val][0]}`), videos[val][1]);
     };
 
     selects.diamond.onchange = e => {
       resetDropdowns(selects.diamond);
-      const map = {
+      selects.diamond.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
         ring: ['diamondRingVideo', 'https://example.com/diamond-rings'],
         necklace: ['diamondNecklaceVideo', 'https://example.com/diamond-necklaces'],
         earrings: ['diamondEarringsVideo', 'https://example.com/diamond-earrings'],
         bracelet: ['diamondBraceletVideo', 'https://example.com/diamond-bracelets']
       };
-      const val = e.target.value;
-      if (map[val]) updateVideo(document.querySelector(`#${map[val][0]}`), map[val][1]);
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val][0]}`), videos[val][1]);
     };
 
     selects.about.onchange = e => {
       resetDropdowns(selects.about);
-      const map = {
+      selects.about.classList.add('selected');
+      const val = e.target.value;
+      const videos = {
         intro: 'aboutUsIntroVideo',
         history: 'aboutUsHistoryVideo',
         mission: 'aboutUsMissionVideo'
       };
-      const val = e.target.value;
-      if (map[val]) updateVideo(document.querySelector(`#${map[val]}`));
+      if (videos[val]) updateVideo(document.querySelector(`#${videos[val]}`));
     };
 
     playPauseButton.onclick = () => {
