@@ -146,7 +146,7 @@
       currentVideo = videoElement;
       videoDisplay.setAttribute('material', 'src', `#${videoElement.id}`);
       isPlaying = false;
-      playPauseButton.textContent = 'Play with Audio';
+      playPauseButton.textContent = 'Play';
 
       buyNowButton.style.display = link ? 'inline-block' : 'none';
       playPauseButton.style.display = 'inline-block';
@@ -182,7 +182,7 @@
       if (currentVideo && targetVisible) {
         if (isPlaying) {
           currentVideo.pause();
-          playPauseButton.textContent = 'Play with Audio';
+          playPauseButton.textContent = 'Play';
         } else {
           currentVideo.play();
           playPauseButton.textContent = 'Pause';
@@ -206,7 +206,7 @@
       document.querySelector('#catalogueContainer').style.display = 'none';
       if (currentVideo) currentVideo.pause();
       isPlaying = false;
-      playPauseButton.textContent = 'Play with Audio';
+      playPauseButton.textContent = 'Play';
     });
   </script>
 </body>
