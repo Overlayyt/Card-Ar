@@ -5,6 +5,39 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
+        <!-- Controls Panel -->
+<div id="controlsPanel" class="floating-ui hidden">
+    <div id="dropdownWrapper">
+        <!-- Gold Dropdown -->
+        <select id="goldSelect">
+            <option value="">Gold Jewellery</option>
+            <option value="ring">Ring</option>
+            <option value="necklace">Necklace</option>
+        </select>
+
+        <!-- Diamond Dropdown -->
+        <select id="diamondSelect">
+            <option value="">Diamond Jewellery</option>
+            <option value="earrings">Earrings</option>
+            <option value="bracelet">Bracelet</option>
+        </select>
+
+        <!-- About Us Dropdown -->
+        <select id="aboutSelect">
+            <option value="">About Us</option>
+            <option value="intro">Intro</option>
+            <option value="history">History</option>
+        </select>
+    </div>
+
+    <!-- Video Controls -->
+    <div id="videoControls">
+        <button id="playPauseBtn">▶️</button>
+        <button id="muteBtn">🔇</button>
+        <button id="fullscreenBtn">⛶</button>
+    </div>
+</div>
+
         /* Container for dropdown menus */
         #catalogueContainer {
             position: absolute;
