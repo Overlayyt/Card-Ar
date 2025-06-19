@@ -68,7 +68,7 @@
       display: none;
     }
 
-    #aboutUsSelect {
+    #aboutUsButton {
       padding: 10px;
       font-size: 14px;
       border: none;
@@ -79,7 +79,7 @@
       cursor: pointer;
     }
 
-    #aboutUsSelect:hover {
+    #aboutUsButton:hover {
       background-color: #c2185b;
     }
 
@@ -111,16 +111,8 @@
     <div style="display: flex; gap: 12px; margin-top: 10px;">
       <button id="buyNowButton" style="display: none;">Explore</button>
       <button id="playPauseButton" style="display: none;">Play with Audio</button>
+      <button id="aboutUsButton">About Us</button>
     </div>
-  </div>
-
-  <div id="aboutUsContainer">
-    <select id="aboutUsSelect">
-      <option value="">About Us</option>
-      <option value="intro">Intro</option>
-      <option value="history">History</option>
-      <option value="mission">Mission</option>
-    </select>
   </div>
 
   <a-scene mindar-image="imageTargetSrc: ./targets.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
@@ -156,7 +148,7 @@
     const videoDisplay = document.querySelector('#videoDisplay');
     const buyNowButton = document.querySelector('#buyNowButton');
     const playPauseButton = document.querySelector('#playPauseButton');
-    const aboutUsContainer = document.querySelector('#aboutUsContainer');
+    const aboutUsButton = document.querySelector('#aboutUsButton');
 
     let currentVideo = document.querySelector('#introVideo');
     let isPlaying = false;
@@ -164,13 +156,12 @@
 
     const selects = {
       gold: document.querySelector('#goldJewelrySelect'),
-      diamond: document.querySelector('#diamondJewelrySelect'),
-      about: document.querySelector('#aboutUsSelect')
+      diamond: document.querySelector('#diamondJewelrySelect')
     };
 
-    const resetDropdowns = (except) => {
+    const resetDropdowns = () => {
       Object.values(selects).forEach(select => {
-        if (select !== except) select.value = "";
+        select.value = "";
       });
     };
 
@@ -188,7 +179,7 @@
     };
 
     selects.gold.onchange = e => {
-      resetDropdowns(selects.gold);
+      resetDropdowns();
       const map = {
         ring: ['goldRingVideo', 'https://www.bluestone.com/jewellery/rings.html'],
         necklace: ['goldNecklaceVideo', 'https://www.bluestone.com/jewellery/necklaces.html'],
@@ -200,7 +191,7 @@
     };
 
     selects.diamond.onchange = e => {
-      resetDropdowns(selects.diamond);
+      resetDropdowns();
       const map = {
         ring: ['diamondRingVideo', 'https://example.com/diamond-rings'],
         necklace: ['diamondNecklaceVideo', 'https://example.com/diamond-necklaces'],
@@ -209,17 +200,6 @@
       };
       const val = e.target.value;
       if (map[val]) updateVideo(document.querySelector(`#${map[val][0]}`), map[val][1]);
-    };
-
-    selects.about.onchange = e => {
-      resetDropdowns(selects.about);
-      const map = {
-        intro: 'aboutUsIntroVideo',
-        history: 'aboutUsHistoryVideo',
-        mission: 'aboutUsMissionVideo'
-      };
-      const val = e.target.value;
-      if (map[val]) updateVideo(document.querySelector(`#${map[val]}`));
     };
 
     playPauseButton.onclick = () => {
@@ -235,16 +215,19 @@
       }
     };
 
+    aboutUsButton.onclick = () => {
+      resetDropdowns();
+      updateVideo(document.querySelector('#aboutUsIntroVideo'));
+    };
+
     const target = document.querySelector('#target1');
     target.addEventListener('targetFound', () => {
       targetVisible = true;
       document.querySelector('#catalogueContainer').style.display = 'flex';
-      aboutUsContainer.style.display = 'block';
     });
     target.addEventListener('targetLost', () => {
       targetVisible = false;
       document.querySelector('#catalogueContainer').style.display = 'none';
-      aboutUsContainer.style.display = 'none';
       if (currentVideo) currentVideo.pause();
       isPlaying = false;
       playPauseButton.textContent = 'Play with Audio';
